@@ -6,7 +6,12 @@ module API
     resource :groups do
       helpers do
         def find_group(id)
-          group = Group.find(id)
+          if id.is_a? Integer
+            group = Group.find(id)
+          else
+            group = Group.find_by_name(id)
+          end
+
 
           if can?(current_user, :read_group, group)
             group
