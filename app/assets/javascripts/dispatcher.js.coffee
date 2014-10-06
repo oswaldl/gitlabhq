@@ -24,18 +24,24 @@ class Dispatcher
       when 'projects:issues:show'
         new Issue()
         shortcut_handler = new ShortcutsIssueable()
+        new ZenMode()
       when 'projects:milestones:show'
         new Milestone()
-      when 'projects:issues:new'
+      when 'projects:milestones:new'
+        new ZenMode()
+      when 'projects:issues:new','projects:issues:edit'
         GitLab.GfmAutoComplete.setup()
         shortcut_handler = new ShortcutsNavigation()
-      when 'projects:merge_requests:new'
+        new ZenMode()
+      when 'projects:merge_requests:new', 'projects:merge_requests:edit'
         GitLab.GfmAutoComplete.setup()
         new Diff()
         shortcut_handler = new ShortcutsNavigation()
+        new ZenMode()
       when 'projects:merge_requests:show'
         new Diff()
         shortcut_handler = new ShortcutsIssueable()
+        new ZenMode()
       when "projects:merge_requests:diffs"
         new Diff()
       when 'projects:merge_requests:index'
@@ -83,6 +89,7 @@ class Dispatcher
           when 'wikis'
             new Wikis()
             shortcut_handler = new ShortcutsNavigation()
+            new ZenMode()
           when 'snippets', 'labels', 'graphs'
             shortcut_handler = new ShortcutsNavigation()
           when 'team_members', 'deploy_keys', 'hooks', 'services', 'protected_branches'

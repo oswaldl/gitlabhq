@@ -6,6 +6,7 @@ class Notes
     @notes_url = gon.relative_url_root + @notes_url if gon.relative_url_root?
     @note_ids = note_ids
     @last_fetched_at = last_fetched_at
+    @noteable_url = document.URL
     @initRefresh()
     @setupMainTargetNoteForm()
     @cleanBinding()
@@ -26,6 +27,7 @@ class Notes
     # Reopen and close actions for Issue/MR combined with note form submit
     $(document).on "click", ".js-note-target-reopen", @targetReopen
     $(document).on "click", ".js-note-target-close", @targetClose
+    $(document).on "click", ".js-comment-button", @updateCloseButton
     $(document).on "keyup", ".js-note-text", @updateTargetButtons
 
     # remove a note (in general)
@@ -94,7 +96,8 @@ class Notes
     , 15000
 
   refresh: ->
-    @getContent() unless document.hidden
+    unless document.hidden or (@noteable_url != document.URL)
+      @getContent()
 
   getContent: ->
     $.ajax
@@ -495,6 +498,11 @@ class Notes
     noteText = form.find(".js-note-text").val()
     if noteText.trim().length > 0
       form.submit()
+
+  updateCloseButton: (e) =>
+    textarea = $(e.target)
+    form = textarea.parents('form')
+    form.find('.js-note-target-close').text('Close')
 
   updateTargetButtons: (e) =>
     textarea = $(e.target)

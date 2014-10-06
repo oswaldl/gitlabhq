@@ -9,11 +9,15 @@ Get all issues created by authenticated user. This function takes pagination par
 GET /issues
 GET /issues?state=opened
 GET /issues?state=closed
+GET /issues?labels=foo
+GET /issues?labels=foo,bar
+GET /issues?labels=foo,bar&state=opened
 ```
 
 Parameters:
 
 - `state` (optional) - Return `all` issues or just those that are `opened` or `closed`
+- `labels` (optional) - Comma-separated list of label names
 
 ```json
 [
@@ -88,12 +92,19 @@ to return the list of project issues.
 GET /projects/:id/issues
 GET /projects/:id/issues?state=opened
 GET /projects/:id/issues?state=closed
+GET /projects/:id/issues?labels=foo
+GET /projects/:id/issues?labels=foo,bar
+GET /projects/:id/issues?labels=foo,bar&state=opened
+GET /projects/:id/issues?milestone=1.0.0
+GET /projects/:id/issues?milestone=1.0.0&state=opened
 ```
 
 Parameters:
 
 - `id` (required) - The ID of a project
 - `state` (optional) - Return `all` issues or just those that are `opened` or `closed`
+- `labels` (optional) - Comma-separated list of label names
+- `milestone` (optional) - Milestone title
 
 ## Single issue
 
