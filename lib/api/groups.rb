@@ -12,11 +12,15 @@ module API
             group = Group.find_by_name(id)
           end
 
+          if group.nil?
+            not_found!
+            return;
+          end
 
           if can?(current_user, :read_group, group)
             group
           else
-            render_api_error!("403 Forbidden - #{current_user.username} lacks sufficient access to #{id}", 403)
+            render_api_error!("403 Forbidden - #{current_user.username} lacks sufficient access to #{group.name}", 403)
           end
         end
 
