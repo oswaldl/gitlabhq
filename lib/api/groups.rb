@@ -16,7 +16,7 @@ module API
           if can?(current_user, :read_group, group)
             group
           else
-            render_api_error!("403 Forbidden - #{current_user.username} lacks sufficient access to #{group.name}", 403)
+            render_api_error!("403 Forbidden - #{current_user.username} lacks sufficient access to #{id}", 403)
           end
         end
 
