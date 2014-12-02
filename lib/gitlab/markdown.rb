@@ -33,6 +33,11 @@ module Gitlab
 
     attr_reader :html_options
 
+    def gfm_with_tasks(text, project = @project, html_options = {})
+      text = gfm(text, project, html_options)
+      parse_tasks(text)
+    end
+
     # Public: Parse the provided text with GitLab-Flavored Markdown
     #
     # text         - the source text
@@ -65,14 +70,22 @@ module Gitlab
         insert_piece($1)
       end
 
-      # Context passed to the markdoqwn pipeline
+      # Used markdown pipelines in GitLab:
+      # GitlabEmojiFilter - performs emoji replacement.
+      #
+      # see https://gitlab.com/gitlab-org/html-pipeline-gitlab for more filters
+      filters = [
+        HTML::Pipeline::Gitlab::GitlabEmojiFilter
+      ]
+
       markdown_context = {
-        asset_root: File.join(root_url,
-                              Gitlab::Application.config.assets.prefix)
+              asset_root: Gitlab.config.gitlab.url,
+              asset_host: Gitlab::Application.config.asset_host
       }
 
-      result = HTML::Pipeline::Gitlab::MarkdownPipeline.call(text,
-                                                             markdown_context)
+      markdown_pipeline = HTML::Pipeline::Gitlab.new(filters).pipeline
+
+      result = markdown_pipeline.call(text, markdown_context)
       text = result[:output].to_html(save_with: 0)
 
       allowed_attributes = ActionView::Base.sanitized_allowed_attributes
@@ -189,7 +202,7 @@ module Gitlab
 
       if identifier == "all"
         link_to("@all", project_url(project), options)
-      elsif user = User.find_by(username: identifier)
+      elsif User.find_by(username: identifier)
         link_to("@#{identifier}", user_url(identifier), options)
       end
     end
@@ -264,6 +277,25 @@ module Gitlab
         class: "gfm gfm-issue #{html_options[:class]}"
       )
       link_to("#{prefix_text}##{identifier}", url, options)
+    end
+
+    # Turn list items that start with "[ ]" into HTML checkbox inputs.
+    def parse_tasks(text)
+      li_tag = '<li class="task-list-item">'
+      unchecked_box = '<input type="checkbox" value="on" disabled />'
+      checked_box = unchecked_box.sub(/\/>$/, 'checked="checked" />')
+
+      # Regexp captures don't seem to work when +text+ is an
+      # ActiveSupport::SafeBuffer, hence the `String.new`
+      String.new(text).gsub(Taskable::TASK_PATTERN_HTML) do
+        checked = $LAST_MATCH_INFO[:checked].downcase == 'x'
+
+        if checked
+          "#{li_tag}#{checked_box}"
+        else
+          "#{li_tag}#{unchecked_box}"
+        end
+      end
     end
   end
 end

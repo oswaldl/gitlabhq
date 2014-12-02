@@ -39,7 +39,7 @@
         Open
 
     .creator
-      Created by #{link_to_member(@project, @issue.author)} #{time_ago_with_tooltip(@issue.created_at)}
+      Created by #{link_to_member(@project, @issue.author)} #{issue_timestamp(@issue)}
 
   %h4.title
     = gfm escape_once(@issue.title)
@@ -48,7 +48,7 @@
     .description
       .wiki
         = preserve do
-          = markdown @issue.description
+          = markdown(@issue.description, parse_tasks: true)
   .context
     %cite.cgray
       = render partial: 'issue_context', locals: { issue: @issue }
@@ -62,7 +62,8 @@
       = link_to 'Close Issue', project_issue_path(@project, @issue, issue: {state_event: :close }, status_only: true), method: :put, class: "btn btn-grouped btn-close js-note-target-close", title: "Close Issue"
 
 .participants
-  %cite.cgray #{@issue.participants.count} participants
+  %cite.cgray
+    = pluralize(@issue.participants.count, 'participant')
   - @issue.participants.each do |participant|
     = link_to_member(@project, participant, name: false, size: 24)
 

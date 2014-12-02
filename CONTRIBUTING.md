@@ -10,7 +10,7 @@ By submitting code as an individual you agree to the [individual contributor lic
 
 ## Security vulnerability disclosure
 
-Please report suspected security vulnerabilities in private to support@gitlab.com, also see the [disclosure section on the GitLab.com website](http://www.gitlab.com/disclosure/). Please do NOT create publicly viewable issues for suspected security vulnerabilities.
+Please report suspected security vulnerabilities in private to support@gitlab.com, also see the [disclosure section on the GitLab.com website](http://about.gitlab.com/disclosure/). Please do NOT create publicly viewable issues for suspected security vulnerabilities.
 
 ## Closing policy for issues and merge requests
 
@@ -22,7 +22,7 @@ Issues and merge requests should be in English and contain appropriate language 
 
 ## Issue tracker
 
-To get support for your particular problem please use the channels as detailed in the [getting help section of the readme](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md#getting-help). Professional [support subscriptions](http://www.gitlab.com/subscription/) and [consulting services](http://www.gitlab.com/consultancy/) are available from [GitLab.com](http://www.gitlab.com/).
+To get support for your particular problem please use the channels as detailed in the [getting help section of the readme](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md#getting-help). Professional [support subscriptions](http://about.gitlab.com/subscription/) and [consulting services](http://about.gitlab.com/consultancy/) are available from [GitLab.com](http://about.gitlab.com/).
 
 The [issue tracker](https://gitlab.com/gitlab-org/gitlab-ce/issues) is only for obvious errors in the latest [stable or development release of GitLab](MAINTENANCE.md). If something is wrong but it is not a regression compared to older versions of GitLab please do not open an issue but a feature request. When submitting an issue please conform to the issue submission guidelines listed below. Not all issues will be addressed and your issue is more likely to be addressed if you submit a merge request which partially or fully addresses the issue.
 
@@ -54,6 +54,8 @@ We welcome merge requests with fixes and improvements to GitLab code, tests, and
 
 Merge requests can be filed either at [gitlab.com](https://gitlab.com/gitlab-org/gitlab-ce/merge_requests) or [github.com](https://github.com/gitlabhq/gitlabhq/pulls).
 
+If you are new to GitLab development (or web development in general), search for the label `easyfix` ([gitlab.com](https://gitlab.com/gitlab-org/gitlab-ce/issues?label_name=easyfix), [github](https://github.com/gitlabhq/gitlabhq/labels/easyfix)). Those are issues easy to fix, marked by the GitLab core-team. If you are unsure how to proceed but want to help, mention one of the core-team members to give you a hint.
+
 ### Merge request guidelines
 
 If you can, please submit a merge request with the fix or improvements including tests. If you don't know how to fix the issue but can write a test that exposes the issue we will accept that as well. In general bug fixes that include a regression test are merged quickly while new features without proper tests are least likely to receive timely feedback. The workflow to make a merge request is as follows:
@@ -78,20 +80,39 @@ The **official merge window** is in the beginning of the month from the 1st to t
 
 Please keep the change in a single MR **as small as possible**. If you want to contribute a large feature think very hard what the minimum viable change is. Can you split functionality? Can you only submit the backend/API code? Can you start with a very simple UI? Can you do part of the refactor? The increased reviewability of small MR's that leads to higher code quality is more important to us than having a minimal commit log. The smaller a MR is the more likely it is it will be merged (quickly), after that you can send more MR's to enhance it.
 
-For examples of feedback on merge requests please look at already [closed merge requests](https://gitlab.com/gitlab-org/gitlab-ce/merge_requests?assignee_id=&label_name=&milestone_id=&scope=&sort=&state=closed). If you would like quick feedback on your merge request feel free to mention one of the Merge Marshalls of [the core-team](https://about.gitlab.com/core-team/). Please ensure that your merge request meets the following contribution acceptance criteria.
+For examples of feedback on merge requests please look at already [closed merge requests](https://gitlab.com/gitlab-org/gitlab-ce/merge_requests?assignee_id=&label_name=&milestone_id=&scope=&sort=&state=closed). If you would like quick feedback on your merge request feel free to mention one of the Merge Marshalls of [the core-team](https://about.gitlab.com/core-team/). Please ensure that your merge request meets the contribution acceptance criteria.
 
-**Please format your merge request description as follows:**
+## Definition of done
+
+If you contribute to GitLab please know that changes involve more than just code.
+We have the following [definition of done](http://guide.agilealliance.org/guide/definition-of-done.html).
+Please ensure you support the feature you contribute through all of these steps.
+
+1. Description explaning the relevancy (see following item)
+1. Working and clean code that is commented where needed
+1. Unit and integration tests that pass on the CI server
+1. Documented in the /doc directory
+1. Changelog entry added
+1. Reviewed and any concerns are addressed
+1. Merged by the project lead
+1. Added to the release blog article
+1. Added to [the website](https://gitlab.com/gitlab-com/www-gitlab-com/) if relevant
+1. Community questions answered
+1. Answers to questions radiated (in docs/wiki/etc.)
+
+## Merge request description format
 
 1. What does this MR do?
 1. Are there points in the code the reviewer needs to double check?
 1. Why was this MR needed?
 1. What are the relevant issue numbers / [Feature requests](http://feedback.gitlab.com/)?
-1. Screenshots (If appropriate)
+1. Screenshots (if relevant)
 
 ## Contribution acceptance criteria
 
 1. The change is as small as possible (see the above paragraph for details)
 1. Include proper tests and make all tests pass (unless it contains a test exposing a bug in existing code)
+1. All tests have to pass, if you suspect a failing CI build is unrelated to your contribution ask for tests to be restarted. See [the CI setup document](http://doc.gitlab.com/ce/development/ci_setup.html) on who you can ask for test restart.
 1. Initially contains a single commit (please use `git rebase -i` to squash commits)
 1. Can merge without problems (if not please merge `master`, never rebase commits pushed to the remote server)
 1. Does not break any existing functionality
@@ -100,7 +121,11 @@ For examples of feedback on merge requests please look at already [closed merge 
 1. Contains functionality we think other users will benefit from too
 1. Doesn't add configuration options since they complicate future changes
 1. Changes after submitting the merge request should be in separate commits (no squashing). You will be asked to squash when the review is over, before merging.
-1. It conforms to the following style guides
+1. It conforms to the following style guides.
+    If your change touches a line that does not follow the style,
+    modify the entire line to follow it. This prevents linting tools from generating warnings.
+    Don't touch neighbouring lines. As an exception, automatic mass refactoring modifications
+    may leave style non-compliant.
 
 ## Style guides
 

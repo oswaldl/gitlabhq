@@ -2,24 +2,24 @@
 #
 # Table name: services
 #
-#  id          :integer          not null, primary key
-#  type        :string(255)
-#  title       :string(255)
-#  project_id  :integer          not null
-#  created_at  :datetime
-#  updated_at  :datetime
-#  active      :boolean          default(FALSE), not null
-#  properties  :text
+#  id         :integer          not null, primary key
+#  type       :string(255)
+#  title      :string(255)
+#  project_id :integer          not null
+#  created_at :datetime
+#  updated_at :datetime
+#  active     :boolean          default(FALSE), not null
+#  properties :text
 #
 
 class HipchatService < Service
   MAX_COMMITS = 3
 
-  prop_accessor :token, :room
+  prop_accessor :token, :room, :server
   validates :token, presence: true, if: :activated?
 
   def title
-    'Hipchat'
+    'HipChat'
   end
 
   def description
@@ -33,7 +33,9 @@ class HipchatService < Service
   def fields
     [
       { type: 'text', name: 'token',     placeholder: '' },
-      { type: 'text', name: 'room',      placeholder: '' }
+      { type: 'text', name: 'room',      placeholder: '' },
+      { type: 'text', name: 'server',
+        placeholder: 'Leave blank for default. https://chat.hipchat.com' }
     ]
   end
 
@@ -44,7 +46,9 @@ class HipchatService < Service
   private
 
   def gate
-    @gate ||= HipChat::Client.new(token)
+    options = { api_version: 'v2' }
+    options[:server_url] = server unless server.nil?
+    @gate ||= HipChat::Client.new(token, options)
   end
 
   def create_message(push)

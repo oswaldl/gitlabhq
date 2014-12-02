@@ -66,7 +66,7 @@ module TreeHelper
   def tree_breadcrumbs(tree, max_links = 2)
     if @path.present?
       part_path = ""
-      parts = @path.split("\/")
+      parts = @path.split('/')
 
       yield('..', nil) if parts.count > max_links
 
@@ -90,7 +90,7 @@ module TreeHelper
   end
 
   def editing_preview_title(filename)
-    if gitlab_markdown?(filename) || markup?(filename)
+    if Gitlab::MarkdownHelper.previewable?(filename)
       'Preview'
     else
       'Diff'

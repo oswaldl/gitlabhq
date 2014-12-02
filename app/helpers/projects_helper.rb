@@ -42,18 +42,22 @@ module ProjectsHelper
   def project_title(project)
     if project.group
       content_tag :span do
-        link_to(simple_sanitize(project.group.name), group_path(project.group)) + " / " + project.name
+        link_to(simple_sanitize(project.group.name), group_path(project.group)) + ' / ' + link_to(simple_sanitize(project.name), project_path(project))
       end
     else
       owner = project.namespace.owner
       content_tag :span do
-        link_to(simple_sanitize(owner.name), user_path(owner)) + " / " + project.name
+        link_to(simple_sanitize(owner.name), user_path(owner)) + ' / ' + link_to(simple_sanitize(project.name), project_path(project))
       end
     end
   end
 
   def remove_project_message(project)
     "You are going to remove #{project.name_with_namespace}.\n Removed project CANNOT be restored!\n Are you ABSOLUTELY sure?"
+  end
+
+  def transfer_project_message(project)
+    "You are going to transfer #{project.name_with_namespace} to another owner. Are you ABSOLUTELY sure?"
   end
 
   def project_nav_tabs
@@ -128,9 +132,9 @@ module ProjectsHelper
 
     toggle_html = content_tag('span', class: 'toggle') do
       toggle_text = if starred
-                      'Unstar'
+                      ' Unstar'
                     else
-                      'Star'
+                      ' Star'
                     end
 
       content_tag('i', ' ', class: 'fa fa-star') + toggle_text

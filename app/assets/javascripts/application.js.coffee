@@ -18,6 +18,7 @@
 #= require jquery.turbolinks
 #= require turbolinks
 #= require bootstrap
+#= require password_strength
 #= require select2
 #= require raphael
 #= require g.raphael-min
@@ -63,7 +64,7 @@ window.extractLast = (term) ->
   return split( term ).pop()
 
 window.rstrip = (val) ->
-  return val.replace(/\s+$/, '')
+  return if val then val.replace(/\s+$/, '') else val
 
 # Disable button if text field is empty
 window.disableButtonIfEmptyField = (field_selector, button_selector) ->
@@ -176,6 +177,13 @@ $ ->
       toggleClass('fa fa-chevron-up')
     $(@).closest(".diff-file").find(".notes_holder").toggle()
     e.preventDefault()
+
+  $(document).on "click", '.js-confirm-danger', (e) ->
+    e.preventDefault()
+    btn = $(e.target)
+    text = btn.data("confirm-danger-message")
+    form = btn.closest("form")
+    new ConfirmDangerModal(form, text)
 
 (($) ->
   # Disable an element and add the 'disabled' Bootstrap class

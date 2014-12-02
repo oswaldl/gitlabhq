@@ -2,14 +2,14 @@
 #
 # Table name: services
 #
-#  id          :integer          not null, primary key
-#  type        :string(255)
-#  title       :string(255)
-#  project_id  :integer          not null
-#  created_at  :datetime
-#  updated_at  :datetime
-#  active      :boolean          default(FALSE), not null
-#  property    :text
+#  id         :integer          not null, primary key
+#  type       :string(255)
+#  title      :string(255)
+#  project_id :integer          not null
+#  created_at :datetime
+#  updated_at :datetime
+#  active     :boolean          default(FALSE), not null
+#  properties :text
 #
 
 class GitlabCiService < CiService
@@ -28,7 +28,7 @@ class GitlabCiService < CiService
   end
 
   def commit_status_path(sha)
-    project_url + "/builds/#{sha}/status.json?token=#{token}"
+    project_url + "/commits/#{sha}/status.json?token=#{token}"
   end
 
   def get_ci_build(sha)
@@ -55,7 +55,7 @@ class GitlabCiService < CiService
   end
 
   def build_page(sha)
-    project_url + "/builds/#{sha}"
+    project_url + "/commits/#{sha}"
   end
 
   def builds_path
