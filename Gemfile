@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+#source "https://rubygems.org"
 source 'http://ruby.taobao.org'
 
 def darwin_only(require_as)
